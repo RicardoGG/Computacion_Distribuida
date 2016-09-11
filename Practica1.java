@@ -10,24 +10,19 @@ public class Practica1{
 		//Leemos la entrada
 		System.out.println("Dame un numero entero:");
 		c = sc.nextInt();
-
-		//Creamos la lista
-		//for(int i=0; i<c; i++){
-		//	l.add(i);
-		//}
-
 		Grafica<Integer> g = new Grafica<Integer>();
-		//Agregamos los nodos a la lista de vertices
-		for(int i=1; i<=c;i++){
-			g.agrega(i);
-		}
+
+		g.agrega(10);
+		g.agrega(11);
+		g.agrega(112);	
+		g.agrega(32);
+
+		LinkedList<Integer> m = g.listaVertices();
+		System.out.println(g.principal(m));
+		System.out.println(g.aCadena());
 
 		
-
-
-
-		System.out.println(g.toString());
-
+			
 	}
 
 	//

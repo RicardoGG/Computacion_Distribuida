@@ -4,10 +4,10 @@ import java.util.Random;
 public class Grafica<T>{
 
 	private class Vertice{
-		public T elemento;
+		public Integer elemento;
 		public LinkedList<Grafica.Vertice> adyacentes;
 
-		public Vertice(T e){
+		public Vertice(Integer e){
 			this.elemento = e;
 			adyacentes = new LinkedList<Grafica.Vertice>();
 		} 
@@ -15,11 +15,9 @@ public class Grafica<T>{
 		public int getGrado(){
 			return adyacentes.size();
 		}
-        public T getElemento(){
+        public Integer getElemento(){
             return this.elemento;
         }
-
-
 
 	}
 
@@ -32,20 +30,35 @@ public class Grafica<T>{
 		aristas = 0;
 	}
 
+    public LinkedList<Integer> listaVertices(){         
+         LinkedList<Integer> l = new LinkedList<Integer>();
+         for(Vertice v: vertices)
+            l.add(v.getElemento());
+        return l;
+    }
 
-	public void agrega(T e){
+	public void agrega(Integer e){
 		Vertice  vertice = new Vertice(e);
 		vertices.add(vertice);
 	}
-	public void conecta(T a, T b) {
+//
+	////public void conecta(T a, T b) {
+    ////    Vertice va = new Vertice(a);
+    ////    Vertice vb = new Vertice(b);
+    ////    va.adyacentes.add(vb);
+    //    vb.adyacentes.add(va);
+      //  aristas ++;
+    //}
+
+    public void conectaEnteros(Integer a, Integer b){
         Vertice va = new Vertice(a);
         Vertice vb = new Vertice(b);
         va.adyacentes.add(vb);
         vb.adyacentes.add(va);
-        aristas ++;
+        aristas ++;   
     }
 
-    private double barabasi(T n, T ie){
+    private double barabasi(Integer n, Integer ie){
         Vertice i = new Vertice(ie);
         Vertice nuevo = new Vertice(n);
     	int ki = i.getGrado();
@@ -56,7 +69,7 @@ public class Grafica<T>{
     	double res = ki / suma;
     	return res; 
     }
-    public void conectaBarabasi(T nuevo){
+    public void conectaBarabasi(Integer nuevo){
         Random r = new Random();
     	double c = 0;
     	double b = 0;
@@ -64,7 +77,7 @@ public class Grafica<T>{
     		b = barabasi(nuevo,vertices.get(i).getElemento());
     		c = r.nextDouble();
     		if(c < b){
-    			conecta(nuevo,vertices.get(i).getElemento());
+    			conectaEnteros(nuevo,vertices.get(i).getElemento());
     		}
     	}
     }
@@ -86,10 +99,27 @@ public class Grafica<T>{
     }
 
 
-    @Override 
-    public String toString(){
-        String s = "La grafica contiene los vertices y aristas : \n [" + getVertices() + "]\n " + " " + getArista();
+    public String principal(LinkedList<Integer> l){               
+        if(l.size()==2){
+            conectaEnteros(l.get(0), l.get(1));
+            return "Conectando los unicos dos elementos "+ l.get(0) + " --------" + l.get(1);
+        }
+        if(l.size()>2){
+            for(int i = 0; i<l.size(); i++){
+                    conectaBarabasi(l.get(i));
+            }
+            return"Todos los elementos conectados";
+        }
+        
+        return "error";
+    }
 
+
+    public String aCadena(){
+        String s = "";
+            for(Vertice v : vertices){
+                s+= "el vertice : " + v.getElemento() + " " + "tiene como adyacentes " + v.adyacentes + " \n";
+            }
         return s;
     }
 
