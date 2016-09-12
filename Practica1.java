@@ -16,7 +16,7 @@ public class Practica1{
 			l.add(i);
 		}	
 
-		g.conectaEnteros(7,8);
+		//g.conectaEnteros(7,8);
 		
 		
 		System.out.println(g.principal(l));		

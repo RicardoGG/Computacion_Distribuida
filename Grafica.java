@@ -1,5 +1,7 @@
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Iterator;
+import java.util.NoSuchElementException; 
 
 public class Grafica<T>{
 
@@ -30,6 +32,10 @@ public class Grafica<T>{
 
 	private LinkedList<Vertice> vertices;
 	private int aristas;
+
+    public int getNumArist(){
+        return this.aristas;
+    }
 
     /**
     *Inicializacion de valores de la grafica*/
@@ -67,12 +73,32 @@ public class Grafica<T>{
     public void conectaEnteros(Integer a, Integer b){
         Vertice va = new Vertice(a);
         Vertice vb = new Vertice(b);
+        if(sonVecinos(a, b) || a == b)
+            throw new IllegalArgumentException();
         va.adyacentes.add(vb);
         vb.adyacentes.add(va);
         aristas ++;   
     }
 
+     public boolean sonVecinos(Integer a, Integer b) {
+        Vertice verticeA = buscaVertice(a), verticeB = buscaVertice(b);
+        if(verticeA == null || verticeB == null)
+            throw new NoSuchElementException();
+        if(verticeA.adyacentes.contains(verticeB))
+            return true;
+        return false;
+    }
 
+      /**Metodo para buscar un vertice en la grafica
+     * @param elemento que contiene el vertice
+     */
+    private Vertice buscaVertice(Integer elemento){
+        Vertice vertice = new Vertice(elemento);
+        for(Vertice v : vertices)
+            if(v.elemento.equals(vertice.elemento))
+                return v;
+        return null;
+    }
     /**
     *Dados el elemento nuevo y el elemento i-esimo
     *calcular con el modelo de barabasi**/
@@ -142,7 +168,7 @@ public class Grafica<T>{
         String s = "";
         String a = "";
         s= "La grafica tiene los siguientes vertices: " + getVertices();
-        a=  getGrados();
+        a=  "La grafica tiene el siguiente numero de aristas : " + getNumArist();
         return s + a;
     }
 
