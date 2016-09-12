@@ -12,18 +12,17 @@ public class Practica1{
 		c = sc.nextInt();
 		Grafica<Integer> g = new Grafica<Integer>();
 
-		g.agrega(10);
-		g.agrega(11);
-		g.agrega(112);	
-		g.agrega(32);
+		for(int i=1; i<=c; i++){
+			l.add(i);
+		}	
 
-		LinkedList<Integer> m = g.listaVertices();
-		System.out.println(g.principal(m));
-		System.out.println(g.aCadena());
-
+		g.conectaEnteros(7,8);
 		
-			
-	}
+		
+		System.out.println(g.principal(l));		
+		String s = g.toString();
+		System.out.println(s);	
 
 	//
+		}
 }

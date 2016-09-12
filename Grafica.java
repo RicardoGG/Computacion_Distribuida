@@ -3,6 +3,10 @@ import java.util.Random;
 
 public class Grafica<T>{
 
+    /**
+    *
+    *Constructor de Vertices**/
+
 	private class Vertice{
 		public Integer elemento;
 		public LinkedList<Grafica.Vertice> adyacentes;
@@ -21,35 +25,45 @@ public class Grafica<T>{
 
 	}
 
+    /**
+    *Variables: Todo grafo tendra un numero de aristas y una lista de vertices*/
+
 	private LinkedList<Vertice> vertices;
 	private int aristas;
 
-
+    /**
+    *Inicializacion de valores de la grafica*/
 	public Grafica(){
 		vertices = new LinkedList<Vertice>();
 		aristas = 0;
 	}
 
-    public LinkedList<Integer> listaVertices(){         
-         LinkedList<Integer> l = new LinkedList<Integer>();
-         for(Vertice v: vertices)
-            l.add(v.getElemento());
-        return l;
+    /**
+    *
+    *Castea Numeros
+    *y los asigna como lista de vertices 
+    *@param l-  la lista de numeros a asignar 
+    **/
+
+    public void setVertices(LinkedList<Integer> l){         
+        LinkedList<Vertice> lv = new LinkedList<Vertice>();
+        for(Integer i: l){
+            Vertice v = new Vertice(i);
+            lv.add(v);    
+        }
+        this.vertices = lv;
+
     }
 
+    /**
+    *
+    *Agrega un entero a la grafica **/
 	public void agrega(Integer e){
 		Vertice  vertice = new Vertice(e);
 		vertices.add(vertice);
 	}
-//
-	////public void conecta(T a, T b) {
-    ////    Vertice va = new Vertice(a);
-    ////    Vertice vb = new Vertice(b);
-    ////    va.adyacentes.add(vb);
-    //    vb.adyacentes.add(va);
-      //  aristas ++;
-    //}
 
+    /**Conecta dos elementos **/
     public void conectaEnteros(Integer a, Integer b){
         Vertice va = new Vertice(a);
         Vertice vb = new Vertice(b);
@@ -58,6 +72,10 @@ public class Grafica<T>{
         aristas ++;   
     }
 
+
+    /**
+    *Dados el elemento nuevo y el elemento i-esimo
+    *calcular con el modelo de barabasi**/
     private double barabasi(Integer n, Integer ie){
         Vertice i = new Vertice(ie);
         Vertice nuevo = new Vertice(n);
@@ -69,6 +87,10 @@ public class Grafica<T>{
     	double res = ki / suma;
     	return res; 
     }
+    //@param nuevo -El valor del elemento a agregar
+    /**
+    *Conecta un elemento a la grafica de acuerdo con el criterio del modelo de barabasi**/
+
     public void conectaBarabasi(Integer nuevo){
         Random r = new Random();
     	double c = 0;
@@ -81,25 +103,26 @@ public class Grafica<T>{
     		}
     	}
     }
+
+    /**Devuelve una representacion en cadena de los vertices**/
     private String getVertices(){
         String s = "";       
-        for(int i=0; i<vertices.size(); i++)
-            s += vertices.get(i).getElemento() + " ";
-        return s;                     
+        for(Vertice v : vertices){
+            s+= v.getElemento() + " ";
+        }    
+        return s;             
     }
 
-    private String getArista(){
-        LinkedList<String> ady = new LinkedList<String>();
-        String s= "";
+    private String getGrados(){
+        String s = "";
         for(Vertice v: vertices){
-            s = String.valueOf(v.adyacentes);
-            ady.add(s);
+            s+= v.getGrado() + " ";
         }
-        return ady.toString();
+        return "Los vertices tienen los grados: " + s;
     }
-
 
     public String principal(LinkedList<Integer> l){               
+        setVertices(l);
         if(l.size()==2){
             conectaEnteros(l.get(0), l.get(1));
             return "Conectando los unicos dos elementos "+ l.get(0) + " --------" + l.get(1);
@@ -115,12 +138,12 @@ public class Grafica<T>{
     }
 
 
-    public String aCadena(){
+    public String toString(){
         String s = "";
-            for(Vertice v : vertices){
-                s+= "el vertice : " + v.getElemento() + " " + "tiene como adyacentes " + v.adyacentes + " \n";
-            }
-        return s;
+        String a = "";
+        s= "La grafica tiene los siguientes vertices: " + getVertices();
+        a=  getGrados();
+        return s + a;
     }
 
 
