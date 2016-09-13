@@ -1,17 +1,19 @@
 from Vertice import *
+#Mandar codigo fuente, grafica de distribucion de grados, distribucion de coeficiente de agrupamiento
 
 class Edges:
 
-	origen = ""
-	destino = ""
-	def __init__(self,origen,destino,peso):
+	origen = None
+	destino = None
+	def __init__(self,origen,destino):
 		self.origen = origen
 		self.destino = destino
 		
 
-	def printArista(self):
-		print self.origen.getElement(), self.destino.getElement()
-
+	def __str__(self):
+		cadena = self.origen.getElement(), self.destino.getElement()
+		return cadena
+		
 	def svertex(self):
 		return self.origen
 

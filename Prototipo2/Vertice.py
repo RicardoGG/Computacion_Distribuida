@@ -16,11 +16,12 @@ class Vertex:
 		if self.vecinos.count(vecino) == 0:
 			self.vecinos.append(vecino)
 		
+		
 	def printVertice(self):
 		print self.element, "grado: ", len(self.vecinos)
 
 	def vecinos(self):
-		return vecinos
+		return self.vecinos
 		
 	def degree(self):
 		return len(self.vecinos)
