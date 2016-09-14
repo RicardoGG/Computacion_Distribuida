@@ -1,176 +1,152 @@
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.Iterator;
-import java.util.NoSuchElementException; 
+	import java.util.LinkedList;
+	import java.util.Random;
+	import java.util.Iterator;
+	import java.util.NoSuchElementException; 
+	import java.util.Iterator;
 
-public class Grafica<T>{
 
-    /**
-    *
-    *Constructor de Vertices**/
+	public class Grafica<T>{
 
-	private class Vertice{
-		public Integer elemento;
-		public LinkedList<Grafica.Vertice> adyacentes;
+		private class Vertice{
+			public Integer e;
+			public LinkedList<Grafica.Vertice> vecinos;
 
-		public Vertice(Integer e){
-			this.elemento = e;
-			adyacentes = new LinkedList<Grafica.Vertice>();
-		} 
-		
-		public int getGrado(){
-			return adyacentes.size();
+			public Vertice(Integer e){
+				this.e = e;
+				vecinos = new LinkedList<Grafica.Vertice>();
+			}
+
+			public double getDegree(){
+				return this.vecinos.size();
+			}
+			
+			public int getElemento(){
+				return this.e;
+			}
+
+			public LinkedList<Grafica.Vertice> getVecinos(){
+				return this.vecinos;
+			}
 		}
-        public Integer getElemento(){
-            return this.elemento;
-        }
+
+		private class Arista{
+	        public Vertice o;
+	        public Vertice d;
+
+	        public Arista(Vertice o, Vertice d){
+	            this.o = o;
+	            this.d = d;
+	        }
+	        public String toString(){
+	        	String s = "A : ( " + o.getElemento()+","+d.getElemento() + ")";
+	        	return s;
+	        }
+	    }
+
+	    private LinkedList<Vertice> vertices;
+	    private LinkedList<Arista> aristas;
+
+	    public Grafica(){
+	    	vertices = new LinkedList<Vertice>();
+	    	aristas = new LinkedList<Arista>();
+	    }
+
+	    public void agrega(Integer a){
+	    	if(!vertices.contains(a))
+	    		vertices.add(new Vertice(a));
+	    }
+
+	    public void conecta(Vertice va, Vertice vb){
+	    	va.vecinos.add(vb);
+	    	vb.vecinos.add(va);
+	    	Arista ar = new Arista(va,vb);
+	    	this.aristas.add(ar);
+	    }
+
+
+	    public int getNumVert(){
+	    	return this.vertices.size();
+	    }
+
+	    public int getNumArist(){
+	    	return this.aristas.size();
+	    }
+
+	    public double suma(){
+	    	double s = 0;
+	    	for(Vertice v : vertices){
+	    		s += v.getDegree();
+	    	}
+	    	return s;
+	    }
+
+	    public double probabilidad(Vertice nuevo, Vertice i){
+	    	double sigma = suma();
+	    	double degree = i.getDegree();
+	    	double resultado = degree / sigma;
+	    	return resultado;
+	    }
+
+	    public void conectaBarabasi(Vertice n){
+	    	Random rnd = new Random();
+	    	double r = rnd.nextDouble();
+	    	double p = 0;
+	    	for(Vertice v : vertices){
+	    		p = probabilidad(n,v);
+	    		if(r<p){
+	    			conecta(v,n);
+	    		}
+	    	}
+		}
+
+	
+
+	    public void redBarabasi(Integer n){
+	    	LinkedList<Vertice> lv = new LinkedList<Vertice>();
+	    	for (int i= 1; i<= n; i++){
+	    		Vertice v = new Vertice(i);
+	    		lv.add(v);
+	    	}
+	    	this.vertices = lv;
+	    	conecta(vertices.get(0),vertices.get(1));
+	    	for(int j = 2; j<vertices.size(); j++){
+	    		conectaBarabasi(vertices.get(j));
+	    	}
+	    }
+
+	    public String toStringArista(){
+	    	String s = "";
+	    	for(Arista a : aristas){
+	    		s+= "( " + a.toString() + ")";
+	    	}
+	    	return s;
+	    }
+
+	    public String toStringVertices(){
+	    	String s = "";
+	    	for(Vertice v : vertices){
+	    		s+= "[ " + "( " +v.getElemento() + ")" +"]";
+	    	}
+	    	return s;
+	    }
+
+	   	public LinkedList<Arista> eliminaLoop(){
+	   		Iterator<Arista> it = aristas.iterator(); 
+	   		while(it.hasNext()){
+	   			Arista a = it.next();
+	   			if(a.o.getElemento() == a.d.getElemento())
+	   				it.remove();
+	   		}
+	   		return aristas;
+	   	}
+
+	  
+
+	    public String toString(){
+	    	String s = "";
+	    	s = "\n la grafica tiene los vertices: \n " + toStringVertices() + " tiene las aristas: \n" + eliminaLoop();
+	    	String x = "\n La grafica tiene : " + getNumVert() + " vertices y " + getNumArist() + " aristas"; 
+	    	return s+x;
+	    }	
 
 	}
-
-    /**
-    *Variables: Todo grafo tendra un numero de aristas y una lista de vertices*/
-
-	private LinkedList<Vertice> vertices;
-	private int aristas;
-
-    public int getNumArist(){
-        return this.aristas;
-    }
-
-    /**
-    *Inicializacion de valores de la grafica*/
-	public Grafica(){
-		vertices = new LinkedList<Vertice>();
-		aristas = 0;
-	}
-
-    /**
-    *
-    *Castea Numeros
-    *y los asigna como lista de vertices 
-    *@param l-  la lista de numeros a asignar 
-    **/
-
-    public void setVertices(LinkedList<Integer> l){         
-        LinkedList<Vertice> lv = new LinkedList<Vertice>();
-        for(Integer i: l){
-            Vertice v = new Vertice(i);
-            lv.add(v);    
-        }
-        this.vertices = lv;
-
-    }
-
-    /**
-    *
-    *Agrega un entero a la grafica **/
-	public void agrega(Integer e){
-		Vertice  vertice = new Vertice(e);
-		vertices.add(vertice);
-	}
-
-    /**Conecta dos elementos **/
-    public void conectaEnteros(Integer a, Integer b){
-        Vertice va = new Vertice(a);
-        Vertice vb = new Vertice(b);
-        if(sonVecinos(a, b) || a == b)
-            throw new IllegalArgumentException();
-        va.adyacentes.add(vb);
-        vb.adyacentes.add(va);
-        aristas ++;   
-    }
-
-     public boolean sonVecinos(Integer a, Integer b) {
-        Vertice verticeA = buscaVertice(a), verticeB = buscaVertice(b);
-        if(verticeA == null || verticeB == null)
-            throw new NoSuchElementException();
-        if(verticeA.adyacentes.contains(verticeB))
-            return true;
-        return false;
-    }
-
-      /**Metodo para buscar un vertice en la grafica
-     * @param elemento que contiene el vertice
-     */
-    private Vertice buscaVertice(Integer elemento){
-        Vertice vertice = new Vertice(elemento);
-        for(Vertice v : vertices)
-            if(v.elemento.equals(vertice.elemento))
-                return v;
-        return null;
-    }
-    /**
-    *Dados el elemento nuevo y el elemento i-esimo
-    *calcular con el modelo de barabasi**/
-    private double barabasi(Integer n, Integer ie){
-        Vertice i = new Vertice(ie);
-        Vertice nuevo = new Vertice(n);
-    	int ki = i.getGrado();
-    	int suma=1;
-    	for(Vertice v: vertices){
-    		suma+=v.getGrado();
-        }
-    	double res = ki / suma;
-    	return res; 
-    }
-    //@param nuevo -El valor del elemento a agregar
-    /**
-    *Conecta un elemento a la grafica de acuerdo con el criterio del modelo de barabasi**/
-
-    public void conectaBarabasi(Integer nuevo){
-        Random r = new Random();
-    	double c = 0;
-    	double b = 0;
-    	for(int i = 0; i<vertices.size(); i++){
-    		b = barabasi(nuevo,vertices.get(i).getElemento());
-    		c = r.nextDouble();
-    		if(c < b){
-    			conectaEnteros(nuevo,vertices.get(i).getElemento());
-    		}
-    	}
-    }
-
-    /**Devuelve una representacion en cadena de los vertices**/
-    private String getVertices(){
-        String s = "";       
-        for(Vertice v : vertices){
-            s+= v.getElemento() + " ";
-        }    
-        return s;             
-    }
-
-    private String getGrados(){
-        String s = "";
-        for(Vertice v: vertices){
-            s+= v.getGrado() + " ";
-        }
-        return "Los vertices tienen los grados: " + s;
-    }
-
-    public String principal(LinkedList<Integer> l){               
-        setVertices(l);
-        if(l.size()==2){
-            conectaEnteros(l.get(0), l.get(1));
-            return "Conectando los unicos dos elementos "+ l.get(0) + " --------" + l.get(1);
-        }
-        if(l.size()>2){
-            for(int i = 0; i<l.size(); i++){
-                    conectaBarabasi(l.get(i));
-            }
-            return"Todos los elementos conectados";
-        }
-        
-        return "error";
-    }
-
-
-    public String toString(){
-        String s = "";
-        String a = "";
-        s= "La grafica tiene los siguientes vertices: " + getVertices();
-        a=  "La grafica tiene el siguiente numero de aristas : " + getNumArist();
-        return s + a;
-    }
-
-
-}
