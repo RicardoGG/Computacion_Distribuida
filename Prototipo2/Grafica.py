@@ -19,7 +19,7 @@ class Graph:
 		self.listaVertices.append(v)
 	
 	def agregaArista(self, vorigen, vdestino):
-		a = Edges(origen,destino)
+		a = Edges(vorigen,vdestino)
 		self.listaAristas.append(a)
 
 	def vertices(self):
@@ -30,22 +30,12 @@ class Graph:
 	
 
 	def probabilidad(self, v1, v2):
-		vi = Vertice(v1)
-		vn = Vertice(v2)
-		ki = vi.degree()
+		ki = v2.degree()
 		suma = 0
 		for vertice in self.listaVertices:
 			suma = suma + vertice.degree()
 		return ki / suma
 
-	def conectarConBarabasi(self, vn,vi):
-		for i in range (1,n+1):
-			p = probabilidad(vn,vi)
-			r = random.uniform(0,1)
-			if r < p:
-			    agregaArista(vi,vn)
-			else:
-				print "error"
 
 
 	def practica(self, n):
@@ -53,10 +43,20 @@ class Graph:
 		for i in range (1,n+1):
 			v = Vertex(i)
 			l.append(v)
-		
-		if len(l) == 2:
-			agregaArista(l[0],l[1])
-			 
+
+		if len(l) > 2:
+			a = Edges(l[0],l[1])
+			self.listaAristas.append(a)
+			for i in range(0,len(l)+1):
+				for j in range (2,len(l)+1):
+					p = self.probabilidad(l[j],l[i])
+					r = random.uniform(0,1)
+					if r < p:
+						agregaArista(l[i],l[j])
+					else:
+						i = i + 1
+
+		 							 
 
 	def getAristas(self):
 		l = []
@@ -71,7 +71,7 @@ class Graph:
 		return l
 
 g = Graph([])
-g.practica(2)
+g.practica(14)
 
 
 print g.getVertices()

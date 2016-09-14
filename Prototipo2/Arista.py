@@ -8,9 +8,6 @@ class Edges:
 	def __init__(self,origen,destino):
 		self.origen = origen
 		self.destino = destino
-		origen.agregaVecino(destino)
-		destino.agregaVecino(origen)
-		
 
 	def printArista(self):
 		return " [ " + str(self.origen.getElemento()) + "," + str(self.destino.getElemento()) + " ] "
