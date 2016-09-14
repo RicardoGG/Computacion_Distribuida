@@ -8,12 +8,13 @@ class Edges:
 	def __init__(self,origen,destino):
 		self.origen = origen
 		self.destino = destino
+		origen.agregaVecino(destino)
+		destino.agregaVecino(origen)
 		
 
-	def __str__(self):
-		cadena = self.origen.getElement(), self.destino.getElement()
-		return cadena
-		
+	def printArista(self):
+		return " [ " + str(self.origen.getElemento()) + "," + str(self.destino.getElemento()) + " ] "
+
 	def svertex(self):
 		return self.origen
 

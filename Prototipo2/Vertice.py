@@ -18,7 +18,7 @@ class Vertex:
 		
 		
 	def printVertice(self):
-		print self.element, "grado: ", len(self.vecinos)
+		return self.element 
 
 	def vecinos(self):
 		return self.vecinos

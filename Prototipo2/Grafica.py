@@ -19,14 +19,12 @@ class Graph:
 		self.listaVertices.append(v)
 	
 	def agregaArista(self, vorigen, vdestino):
-		vorigen.agregaVecino(vdestino)
-		vdestino.agregaVecino(vorigen)
 		a = Edges(origen,destino)
 		self.listaAristas.append(a)
-		return True
 
 	def vertices(self):
-		return str(self.listaVertices)
+		return self.listaVertices
+	
 	def edges(self):
 		return self.listaAristas
 	
@@ -55,18 +53,27 @@ class Graph:
 		for i in range (1,n+1):
 			v = Vertex(i)
 			l.append(v)
+		
+		if len(l) == 2:
+			agregaArista(l[0],l[1])
+			 
 
-		for v in l:
-			if len(l) == 2:
-				a = Edges(l[0],l[1])
-				self.listaAristas.append(a)
-
-
+	def getAristas(self):
+		l = []
+		for a in self.listaAristas:
+			l.append(a.printArista())
+		return l
+		
+	def getVertices(self):
+		l = []
+		for a in self.listaVertices:
+			l.append(a.printVertice())
+		return l
 
 g = Graph([])
 g.practica(2)
 
 
-print g.vertices()
+print g.getVertices()
 
-print g.edges()
+print g.getAristas()
